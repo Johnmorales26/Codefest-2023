@@ -1,6 +1,7 @@
 package com.johndev.pokedex.ui.screens.pokedexScreen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,49 +36,46 @@ import com.johndev.pokedex.ui.theme.PokedexTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemPokemonCard(pokemon: PokemonEntity) {
+fun PokemonCard(pokemon: PokemonEntity) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
+            .border(width = 2.dp, color = Color(0xffF5F5F5))
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Box(modifier = Modifier.weight(3f)) {
-                Box(
-                    modifier = Modifier
-                        .width(106.dp)
-                        .height(8.dp)
-                        .align(Alignment.TopCenter)
-                        .background(Color(0xffD9D9D9))
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp), verticalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier
+                    .weight(3f)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = formatId(pokemon.id),
-                            style = MaterialTheme.typography.bodyLarge
+                    Text(
+                        text = formatId(pokemon.id),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Text(
+                        text = pokemon.name.capitalizeFirstLetter(),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+                LazyRow(
+                    modifier = Modifier.weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(pokemon.types.size) { index ->
+                        AssistChip(
+                            onClick = { },
+                            label = { Text(text = pokemon.types[index].name.capitalizeFirstLetter()) }
                         )
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(
-                            text = pokemon.name.capitalizeFirstLetter(),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                    LazyRow(
-                        modifier = Modifier.weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(pokemon.types.size) {
-                            AssistChip(
-                                onClick = { },
-                                label = { Text(text = pokemon.types[it].name.capitalizeFirstLetter()) })
-                        }
                     }
                 }
             }
@@ -103,8 +100,7 @@ fun ItemPokemonCard(pokemon: PokemonEntity) {
                     AsyncImage(
                         model = pokemon.sprites.front_default,
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -128,6 +124,6 @@ fun GreetingPreview() {
                 front_default = getImageById(1)
             )
         )
-        ItemPokemonCard(pokemon)
+        PokemonCard(pokemon)
     }
 }
