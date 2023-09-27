@@ -74,7 +74,7 @@ fun PokemonCard(pokemon: PokemonEntity) {
                     items(pokemon.types.size) { index ->
                         AssistChip(
                             onClick = { },
-                            label = { Text(text = pokemon.types[index].name.capitalizeFirstLetter()) }
+                            label = { Text(text = if (pokemon.types[index].name != null) pokemon.types[index].name.capitalizeFirstLetter() else "") }
                         )
                     }
                 }
