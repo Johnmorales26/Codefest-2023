@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.johndev.pokedex.R
@@ -35,6 +36,7 @@ import com.johndev.pokedex.common.entities.Type
 import com.johndev.pokedex.common.utils.Retrofit.service
 import com.johndev.pokedex.common.utils.getImageById
 import com.johndev.pokedex.ui.screens.pokedexScreen.components.PokemonCard
+import com.johndev.pokedex.ui.screens.pokedexScreen.components.PokemonCardLoad
 import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,8 +82,15 @@ fun PokedexScreen() {
                         }
                     } else {
                         // Puedes mostrar un indicador de carga o mensaje de error aquí mientras se carga la información.
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            for (index in offset.value..limit.value) {
+                                PokemonCardLoad(Color(0xffe5e9ec))
+                            }
                         }
                     }
                 }
