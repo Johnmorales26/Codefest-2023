@@ -1,6 +1,6 @@
 package com.johndev.pokedex.common.entities
 
-data class Type(
+data class Types(
     val slot: Int,
-    val type: TypeX
+    val type: Type
 )

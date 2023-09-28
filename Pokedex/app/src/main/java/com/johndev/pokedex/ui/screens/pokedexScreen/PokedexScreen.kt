@@ -9,21 +9,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,10 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.johndev.pokedex.R
 import com.johndev.pokedex.common.entities.PokemonEntity
-import com.johndev.pokedex.common.entities.Sprites
-import com.johndev.pokedex.common.entities.Type
 import com.johndev.pokedex.common.utils.Retrofit.service
-import com.johndev.pokedex.common.utils.getImageById
 import com.johndev.pokedex.ui.screens.pokedexScreen.components.PokemonCard
 import com.johndev.pokedex.ui.screens.pokedexScreen.components.PokemonCardLoad
 import kotlinx.coroutines.runBlocking
@@ -44,7 +37,7 @@ import kotlinx.coroutines.runBlocking
 fun PokedexScreen() {
     val pokemonListState = remember { mutableStateOf<List<PokemonEntity>?>(null) }
     val offset = remember { mutableStateOf(0) }
-    val limit = remember { mutableStateOf(10) }
+    val limit = remember { mutableStateOf(50) }
 
     // Lista temporal para acumular los Pokémon
     val tempList = mutableListOf<PokemonEntity>()
@@ -54,9 +47,10 @@ fun PokedexScreen() {
         LaunchedEffect(index) {
             try {
                 val response = service.getPokemonInfo(index.toString())
+                Log.i("PokemonData", response.toString())
                 tempList.add(response) // Agrega el Pokémon a la lista temporal
                 // Verifica si hemos recopilado todos los Pokémon
-                if (tempList.size == 10) {
+                if (tempList.size == 50) {
                     // Asigna la lista completa a pokemonListState una vez que se recopilan todos los Pokémon
                     pokemonListState.value = tempList.toList().sortedByDescending { index }
                 }
@@ -77,15 +71,16 @@ fun PokedexScreen() {
                     if (pokemonListState.value != null) {
                         PokemonList(pokemonListState.value!!) {
                             pokemonListState.value = null
-                            offset.value += 10
-                            limit.value += 10
+                            offset.value += 50
+                            limit.value += 50
                         }
                     } else {
                         // Puedes mostrar un indicador de carga o mensaje de error aquí mientras se carga la información.
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(8.dp),
+                                .padding(8.dp)
+                                .verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             for (index in offset.value..limit.value) {

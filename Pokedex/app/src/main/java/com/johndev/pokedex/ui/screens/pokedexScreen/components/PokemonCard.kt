@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import com.johndev.pokedex.common.entities.PokemonEntity
 import com.johndev.pokedex.common.entities.Sprites
 import com.johndev.pokedex.common.entities.Type
+import com.johndev.pokedex.common.entities.Types
 import com.johndev.pokedex.common.utils.capitalizeFirstLetter
 import com.johndev.pokedex.common.utils.formatId
 import com.johndev.pokedex.common.utils.getImageById
@@ -74,7 +75,7 @@ fun PokemonCard(pokemon: PokemonEntity) {
                     items(pokemon.types.size) { index ->
                         AssistChip(
                             onClick = { },
-                            label = { Text(text = if (pokemon.types[index].name != null) pokemon.types[index].name.capitalizeFirstLetter() else "") }
+                            label = { Text(text = pokemon.types[index].type.name.capitalizeFirstLetter()) }
                         )
                     }
                 }
@@ -117,8 +118,20 @@ fun GreetingPreview() {
             id = 1,
             name = "bulbasaur",
             types = listOf(
-                Type(name = "grass"),
-                Type(name = "poison")
+                Types(
+                    slot = 1,
+                    type = Type(
+                        name = "grass",
+                        url = ""
+                    )
+                ),
+                Types(
+                    slot = 2,
+                    type = Type(
+                        name = "poison",
+                        url = ""
+                    )
+                )
             ),
             sprites = Sprites(
                 front_default = getImageById(1)
